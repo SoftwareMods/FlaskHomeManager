@@ -19,8 +19,8 @@ def index():
 
     if request.method == 'POST':
 
-        if request.form.get('UpdateTask'):
-            task_id = int(request.form.get('task_id'))
+        if request.form.get('update_id'):
+            task_id = int(request.form.get('update_id'))
         else:
             task_id = getNewId(mytasks)
 
@@ -28,7 +28,7 @@ def index():
         task_due  = request.form.get('task-due')
         task_complete  = 1 if request.form.get('task-complete') == 'on' else 0
         json_obj = {"id": task_id, "task_name": task_name, "task_due": task_due, "complete": task_complete}
-        if request.form.get('UpdateTask'):
+        if request.form.get('update_id'):
             for i in range(len(mytasks)):
                 if mytasks[i]['id'] == task_id:
                     mytasks[i]['name'] = task_name

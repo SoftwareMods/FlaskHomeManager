@@ -13,7 +13,7 @@
             <div class="form-floating">
                 
                 {% if update_task %}
-                    <input type="hidden" name="task_id" value="{{update_task.id}}" />
+                    <input type="hidden" name="update_id" value="{{update_task.id}}" />
                 {% endif %}
                 <input class="form-control" name="new-task" id="taskName"
                 {% if update_task %}
