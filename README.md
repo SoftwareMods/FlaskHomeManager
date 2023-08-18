@@ -16,5 +16,6 @@ To start the application call serve.sh
 ```
 /path/to/serve.sh
 ```
+In your browser, navigate to localhost:8081 (or whatever port you have defined in serve.sh)
 
 
