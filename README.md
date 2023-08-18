@@ -48,4 +48,3 @@ Add / View journal entries
 
 ### Development
 List of font awesome icons available for future development
-
