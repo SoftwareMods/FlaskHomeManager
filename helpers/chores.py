@@ -53,8 +53,6 @@ def getDueChores():
             last_completed_obj = datetime.strptime(last_completed, "%m/%d/%Y").date()
             # compare the dates
             days_passed = (today - last_completed_obj).days
-            if chore['name'] == "Pans":
-                debug(f"days_passed: {days_passed}, freq_days: {freq_in_days[freq]}")
             if days_passed >= freq_in_days[freq]:
                 todo_list.append(chore) 
         else:
