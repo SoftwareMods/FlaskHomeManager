@@ -18,5 +18,19 @@ To start the application call serve.sh
 ```
 In your browser, navigate to localhost:8081 (or whatever port you have defined in serve.sh)
 ![home_management_homepage](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/887bd144-d51a-4a6a-8393-9f4b4a98543b)
+### Chores
 
+### Tasks
+
+### Shopping
+
+### Bills
+
+### School
+
+### Study
+
+### Journal
+
+### Development
 
