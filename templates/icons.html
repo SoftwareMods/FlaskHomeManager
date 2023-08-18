@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #cb6124; }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Available Icons</h4>
+
+    <table class="table table-striped" id="icon-list">
+        <thead>
+            <tr><th>Icon Name</th><th>Icon</th></tr>
+        </thead>
+        <tbody>
+    {% for icon in icons %}
+        <tr><td>{{icon}}</td><td><i class="fa-solid fa-xl {{icon}}"></i></td></tr>
+    {% endfor %}
+    </tbody>
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#icon-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10});
+    });
+</script>
+{% endblock %}

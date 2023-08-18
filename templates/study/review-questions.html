@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Review - {{subject.name}}</h4>
+
+    {% macro increment(dct, key, inc=1)%}
+        {% if dct.update({key: dct[key] + inc}) %} {% endif %}
+    {% endmacro %}
+
+    <body class="container my-5">
+      <div class="row mt-3">
+        <div id="carouselSubjectReview" class="carousel" data-bs-ride="false" data-bs-interval="false" data-ec-toggle="responsive-carousel" data-ec-size="1">
+          <div class="carousel-inner" role="listbox">
+
+            {% set counter = { 'counter1': 1 } %}
+            {% for question in subject.questions %}
+            <div class="carousel-item {% if counter.counter1 == 1 %}active{%endif%}">
+              <div class="index-card">
+                <div class="flip-card">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <span style="padding-left: 12px;">{{counter.counter1}} / {{subject.questions|length}}</span>
+                        <div class="valigndiv valigndiv-front">
+                            {{question.question}}
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <span style="padding-left: 12px;">{{counter.counter1}} / {{subject.questions|length}}</span>
+                        <div class="valigndiv valigndiv-back">
+                            {{question.answer}}
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- next/prev controls skip over the next/prev and go on, add a blank item for it to skip each time instead -->
+            <div class="carousel-item"></div>
+            {{ increment(counter, 'counter1') }}
+            {% endfor %}
+
+          </div>
+          <a class="carousel-control-prev" href="#carouselSubjectReview" role="button" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a class="carousel-control-next" href="#carouselSubjectReview" role="button" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+
+      {% if mysubjects %}
+<div id="subject-list">
+    <table class="table table-striped" id="subject-review">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Questions</th>
+                <th>Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in mysubjects %}
+            <tr>
+                <td>{{subject.name}}</td>
+                <td style="text-align: center;">{{subject.questions|length}}</td>
+                <td style="text-align: center;">{{subject.score}}%</td>
+                <td>
+                    <!-- Add Questions -->
+                    <a href='/study/add-questions/{{subject.id}}' title="add questions to {{subject.name}}"><i
+                        class="fa-solid fa-lg fa-file-circle-plus" title='Add questions to {{subject.name}}'></i></a>
+
+                        {% if subject.questions|length > 0 %}
+                            <!-- Review -->
+                            <a href='/study/review/{{subject.id}}' title="review questions for {{subject.name}}"><i
+                                class="fa-solid fa-lg fa-file-circle-question" title='Review questions for {{subject.name}}'></i></a>
+
+                            <!-- Test -->
+                            <a href='/study/test/{{subject.id}}' title="test knowledge of {{subject.name}}"><i
+                                class="fa-solid fa-lg fa-exclamation-triangle" title='Test knowledge of {{subject.name}}'></i></a>
+                        {% endif %}
+
+                    <!-- Test -->
+                    <a href='/study/delete/{{subject.id}}' title="delete {{subject.name}}" class="confirmation"><i
+                        class="fa-solid fa-lg fa-trash-can" title='Delete {{subject.name}}'></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#subject-review').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 4, "order": [[1, "desc"]] });
+});
+</script>
+{% endblock %}

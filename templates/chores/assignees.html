@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #cb6124;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Assignees</h4>
+<div class="widget no-float">
+    <form method='post' action="/chores-assignees">
+        {% if update %}
+        <input type="hidden" name="update_id" value="{{update}}" />
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="name" id="AssigneeName"
+                    {% if update %}
+                        {% for assignee in assignees %}
+                            {% if assignee.id == update|int %}
+                                value="{{assignee.name}}"
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        value=""
+                    {% endif %}
+                    >
+                    <label for="AssigneeName">First Name</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bedtime" id="AssigneeBedTime"
+                    {% if update %}
+                        {% for assignee in assignees %}
+                            {% if assignee.id == update|int %}
+                                value="{{assignee.bedtime}}"
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        value=""
+                    {% endif %}>
+                    <label for="AssigneeBedTime">Bed Time in HHMM</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bank" id="AssigneeBank"
+                    {% if update %}
+                        {% for assignee in assignees %}
+                            {% if assignee.id == update|int %}
+                                value="{{assignee.bank}}"
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        value=""
+                    {% endif %}>
+                    <label for="AssigneeBank">Allowance Earned</label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+    </form>
+</div>
+
+{% if assignees %}
+<div class="widget no-float">
+    <!-- list assignees and allow edits -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Bed Time</th>
+                <th>Allowance</th>
+                <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for assignee in assignees %}
+            <tr>
+                <td>{{assignee.name}}</td>
+                <td>{{assignee.bedtime}}</td>
+                <td>{{ "$%.2f"|format(assignee.bank) }}</td>
+                <td>
+                <!-- Delete -->
+                <a href='/chores/delete-assignee/{{assignee.id}}' title="delete {{assignee.name}}" class="confirmation"><i
+                    class="fa-solid fa-trash-can" title='Delete {{assignee.name}}'></i></a>
+                <!-- Update -->
+                <a href='/chores-assignees?update={{assignee.id}}' title="update {{assignee.name}}"><i
+                    class="fa-solid fa-gear" title='Update {{assignee.name}}'></i></a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+       $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+	});
+    });
+</script>
+{% endblock %}

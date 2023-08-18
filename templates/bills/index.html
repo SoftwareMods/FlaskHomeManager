@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Bills</h4>
+
+<div class="widget-add-bill">
+    <div class='widget-title'>{% if update_bill %}Update{%else%}Add{%endif%} Bill</div>
+    <form name='add-bill-form' method='post' action="/bills">
+    {% if update_bill %}
+        <input type="hidden" name="bill_id" value="{{update_bill.id}}" />
+    {% endif %}
+    <input class="form-control form-control-sm" name="bill-name" id="bill-name" type="text" placeholder="Name" {% if update_bill %} value="{{update_bill.name}}" {% endif %} aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm" name="paid-by" id="bill-paid-by" type="text" placeholder="Paid By" {% if update_bill %}value="{{update_bill.paid_by}}" {%endif%} aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm" name="bill-due" id="bill-due" type="text" placeholder="Due" {% if update_bill %}value="{{update_bill.due_date}}" {%endif%} aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm" name="bill-amount" id="bill-amount" type="text" placeholder="Amount" {% if update_bill %}value="{{update_bill.amount}}" {%endif%} aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm" name="bill-past-due" id="bill-past-due" type="text" placeholder="Past Due" {% if update_bill %}value="{{update_bill.past_due}}" {%endif%} aria-label=".form-control-sm example">
+    <input class="form-control form-control-sm" name="bill-paid-date" id="bill-paid-date" type="text" placeholder="Paid on" {% if update_bill %}value="{{update_bill.paid_date}}" {%endif%}aria-label=".form-control-sm example">
+    <span style="padding-left: 6px;">Paid</span><input type='checkbox' name='bill-paid' id="bill-paid" {{ "checked='checked'" if update_bill.paid else "" }} />
+    <button type="submit"
+            class="btn btn-primary"
+            style="float: right;"
+            name="{% if update_bill %}UpdateBill{%else%}AddBill{%endif%}"
+            value="{% if update_bill %}Update{%else%}Add{%endif%}">
+            {% if update_bill %}Update{%else%}Add{%endif%}
+    </button>
+</div>
+
+<div class="widget" id="upcoming-bills-widget">
+    <table class="table table-striped" id="upcoming-bills">
+        <thead>
+            <th>Paid By</th>
+            <th>Due</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% for date in upcoming_bills %}
+                {% for key in upcoming_bills[date] %}
+                    {% for entry in upcoming_bills[date][key] %}
+                    <tr>
+                        <td>{{entry}}</td>
+                        <td>{{key}}</td>
+                        <td>{{upcoming_bills[date][key][entry]}}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if bills %}
+<div class="widget" style="width: 100%;">
+<table class='table table-striped' id="bill-list">
+    <thead>
+        <tr>
+            <th>Bill</th>
+            <th>Paid By</th>
+            <th>Due</th>
+            <th>Amount</th>
+            <th>Past Due</th>
+            <th>Paid</th>
+            <th>Paid Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bill in bills %}
+        <tr>
+            <td>{{bill.name}}</td>
+            <td>{{bill.paid_by}}</td>
+            <td>{{bill.due_date}}</td>
+            <td>{{bill.amount}}</td>
+            <td>{{bill.past_due}}</td>
+            <td>{% if bill.paid == 1 %}YES{% else %}NO{% endif %}</td>
+            <td>{{bill.paid_date}}</td>
+            <td>
+
+                <!-- Delete -->
+                <a href='/bills/delete/{{bill.id}}' title="delete {{bill.bill_name}}" class="confirmation"><i
+                        class="fa-solid fa-trash-can" title='Delete {{bill.bill_name}}'></i></a>
+
+                <!-- Update -->
+                <a href='/bills?update={{bill.id}}' title="update {{bill.bill_name}}"><i class="fa-solid fa-gear"
+                        title='Update {{bill.bill_name}}'></i></a>
+
+                {% if bill.paid == 0 %}
+                <!-- Mark as paid -->
+                <a href='/bills/paid/{{bill.id}}' title="mark {{bill.bill_name}} as paid" class="confirmation"><i
+                        class="fa-solid fa-check" title='Mark {{bill.bill_name}} as paid'></i></a>
+                {%else%}
+                <!-- Mark as unpaid -->
+                <a href='/bills/unpaid/{{bill.id}}' title="mark {{bill.bill_name}} as unpaid" class="confirmation"><i
+                        class="fa-solid fa-xmark" title='Mark {{bill.bill_name}} as unpaid'></i></a>
+                {% endif %}
+
+                <!-- Info -->
+                <a href='/bills/info/{{bill.name}}' title="into {{bill.bill_name}}"><i class="fa-solid fa-info"
+                        title='View information and history on {{bill.bill_name}}'></i></a>
+
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#bill-name").focus();
+        $('#bill-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[5, "asc"], [2, "asc"]] });
+        $('#upcoming-bills').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"]] });
+        $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+        });
+    });
+</script>
+{% endblock %}

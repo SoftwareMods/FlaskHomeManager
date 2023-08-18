@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #cb6124; }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Journal Entries</h4>
+
+    {% if entries %}
+<table class='table table-striped' id="entry-list">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Entry</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{entry.datetime}}</td>
+            <td>{{entry.title}}</td>
+            <td>{{entry.entry}}</td>
+            <td>
+                
+                <!-- Delete -->
+                <a href='/journal/delete/{{entry.id}}' title="delete {{entry.title}}" class="confirmation"><i
+                    class="fa-solid fa-trash-can" title='Delete {{entry.title}}'></i></a>
+
+            <!-- Update -->
+            <a href='/journal?update={{entry.id}}' title="update {{entry.title}}"><i
+                class="fa-solid fa-gear" title='Update {{entry.title}}'></i></a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript"> 
+    $(document).ready(function () {
+        $('#entry-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[0, "desc"]] });
+        $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+        });
+    });
+</script>
+{% endblock %}

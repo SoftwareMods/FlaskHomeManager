@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1 >Home Management</h1>
+
+<!--Tasks-->
+{% if tasks %}
+<div class="widget">
+<table class='table table-striped' id="task-list-home">
+    <thead>
+        <tr>
+            <th>Incomplete Tasks</th>
+            <th>Due</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            {% for task in tasks %}
+                {% if task.complete == 0 %}
+                <tr>
+                    <td>{{task.task_name}}</td>
+                    <td>{{task.task_due}}</td>
+                </tr>
+                {% endif %}
+
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+<!--Unpaid Bills-->
+{% if bills %}
+<div class="widget">
+<table class='table table-striped' id="bill-list-home">
+    <thead>
+        <tr>
+            <th>Unpaid Bills</th>
+            <th>Due</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            {% for bill in bills %}
+                {% if bill.paid == 0 %}
+                <tr>
+
+                        <td>{{bill.name}}</td>
+                        <td>{{bill.due_date}}</td>
+                        <td>{{bill.amount}}</td>
+
+
+                </tr>
+                {% endif %}
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#bill-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[1, "asc"],[0, "asc"]] });
+    });
+    $(document).ready(function () {
+        $('#task-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[1, "asc"],[0, "asc"]] });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Add Questions - {{subject.name}}</h4>
+
+{% if update_question %}
+{{update_question}}
+{% endif %}
+
+{% macro increment(dct, key, inc=1)%}
+    {% if dct.update({key: dct[key] + inc}) %} {% endif %}
+{% endmacro %}
+
+<div class="widget-add-question">
+
+    <div class='widget-title'>Add question</div>
+    <input type="radio"
+                id="multi-or-exact"
+                name='multi-or-exact'
+                value="multi"
+                onChange="switchVisible();"
+                {{ "checked='checked'" if update_question and update_question.incorrect_answers|length > 0  else "" }}
+
+                /> Multiple Choice
+    <input type="radio"
+                id="multi-or-exact"
+                name='multi-or-exact'
+                value="exact"
+                onChange="switchVisible();"
+                {{ "checked='checked'" if update_question and update_question.incorrect_answers|length == 0 or not update_id else "" }}
+                /> Exact Answer
+    <form name='add-question-form' method='post' action="/study/add-questions/{{subject.id}}">
+
+        <table id='add-exact-answer'
+        {% if update_question and update_question.incorrect_answers|length > 0 %}
+                style="display: none;"
+        {% else %}
+                style="display: block;"
+        {% endif %}
+        >
+
+            <thead>
+            </thead>
+            <tr>
+                {% if update_question %}
+                <input type="hidden" name="question_id" value="{{update_question.id}}" />
+                {% endif %}
+                <td><input type='text' name='new-exact-question' id='new-question' {% if update_question
+                        %}value="{{update_question.question}}" {%endif%} placeholder="Question" /></td>
+                <td><input type='text' name='new-exact-answer' id='new-answer' {% if update_question
+                        %}value="{{update_question.answer}}" {%endif%} placeholder="Answer" /></td>
+                <td colspan='2' id='add-question'>
+                    {% if update_question %}
+                    <input type='submit' name='UpdateQuestion' value='Update' />
+                    {% else %}
+                    <input type='submit' name='AddQuestion' value='Add' />
+                    {% endif %}
+                </td>
+            </tr>
+
+        </table>
+
+        <table id="add-multi-answer"
+        {% if update_question and update_question.incorrect_answers|length == 0 or not update_id %}
+                style="display: none;"
+        {% else %}
+                style="display: block;"
+        {% endif %}
+        >
+            <tr>
+                <td><input type='text' name='new-multi-question' id='new-question' {% if update_question
+                        %}value="{{update_question.question}}" {%endif%} placeholder="Question" /></td>
+
+            </tr>
+            <tr><td><input type='text' name='new-multi-answer' id='new-answer-multi' {% if update_question
+                %}value="{{update_question.answer}}" {%endif%} placeholder="Correct Answer" /></td></tr>
+                <tr>
+                    <td>
+                        {% if not update_question %}
+                        <input type='text' name='new-incorrect-answer_1' id='new-answer-multi-incorrect' placeholder="Incorrect Answer" />
+                        {% else %}
+                        {% set counter = { 'counter1': 2 } %}
+                            {% if update_question.incorrect_answers|length > 0 %}
+                            <input type='text'
+                                        name='new-incorrect-answer_1'
+                                        id='new-answer-multi-incorrect_1'
+                                        value="{{update_question.incorrect_answers[0]}}"
+                                        placeholder="Incorrect Answer" />
+                                {% for inc in update_question.incorrect_answers[1:] %}
+
+                                <input type='text'
+                                            name='new-incorrect-answer_{{counter.counter1}}'
+                                            id='new-answer-multi-incorrect_{{counter.counter1}}'
+                                            placeholder="Incorrect Answer {{counter.counter1}}" value="{{inc}}"/>
+                                {{ increment(counter, 'counter1') }}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <input type="button" id="add-incorrect" value="Add More" onClick="copyRow()"/>
+                        {% if update_question %}
+                        <input type='submit' name='UpdateQuestion' value='Update' />
+                        {% else %}
+                        <input type='submit' name='AddQuestion' value='Add' />
+                        {% endif %}
+                    </td>
+                </tr>
+        </table>
+
+    </form>
+</div>
+
+{% if subject.questions|length > 0 %}
+<table class="table table-striped" id="question-list">
+    <thead>
+        <tr>
+            <th>Question</th>
+            <th>Correct Answer</th>
+            <th>Incorrect Answers</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for q in subject.questions %}
+        <tr>
+            <td>{{q.question}}</td>
+            <td>{{q.answer}}</td>
+            <td>
+                {% if q.incorrect_answers|length > 0 %}
+                    {{q.incorrect_answers}}
+                {%else%}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                <!-- Delete -->
+                <a href='/study/delete-question/{{subject.id}}/{{q.id}}' title="delete question" class="confirmation"><i
+                        class="fa-solid fa-trash-can" title='Question'></i></a>
+
+                <!-- Update -->
+                <a href='/study/add-questions/{{subject.id}}?update={{q.id}}' title="update question"><i class="fa-solid fa-gear"
+                        title='Update question'></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#question-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5 });
+    });
+</script>
+<script type="text/javascript">
+    function switchVisible() {
+            if (document.getElementById('add-multi-answer')) {
+
+                if (document.getElementById('add-multi-answer').style.display == 'none') {
+                    document.getElementById('add-multi-answer').style.display = 'block';
+                    document.getElementById('add-exact-answer').style.display = 'none';
+                }
+                else {
+                    document.getElementById('add-multi-answer').style.display = 'none';
+                    document.getElementById('add-exact-answer').style.display = 'block';
+                }
+            }
+}
+</script>
+<script type="text/javascript">
+function copyRow() {
+            var html = $('#add-multi-answer tr:last').html();
+            var arrInput = document.getElementsByTagName("input");
+            let inc_string = 'new-incorrect-answer_'
+            incorrect_answers = []
+            for (let i = 0; i < arrInput.length; i++) {
+                let input_name = arrInput[i].name
+                if (input_name.includes(inc_string)) {
+                    console.log(input_name)
+                    incorrect_answers.push(input_name)
+                }
+            }
+            last_num = incorrect_answers[incorrect_answers.length-1].split('new-incorrect-answer_')[1]
+
+            new_num = parseInt(last_num) + 1
+            $('#add-multi-answer tr:last').after("<tr>\
+                <td>\
+                    <input type='text' name='new-incorrect-answer_" + new_num + "' \
+                    id='new-answer-multi-incorrect' \
+                    placeholder='Incorrect Answer " + new_num + "' />\
+                </td></tr>");
+        }
+</script>
+
+{% endblock %}

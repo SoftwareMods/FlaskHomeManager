@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #cb6124; }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Chores</h4>
+
+    {% if not chores %}
+    <div class="widget no-float"><h5>No chores, add them first under Chores > Add</h5>
+    {% else %}
+
+    <div class="widget no-float">
+        <!-- list chores and allow edits -->
+        <table id="chore-list" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Chore</th>
+                    <th>Floor/Location</th>
+                    <th>Frequency</th>
+                    <th>Assigned To</th>
+                    <th>Last Completed</th>
+                    <th>Mark As Complete</th>
+                    </tr>
+            </thead>
+            <tbody>
+                {% for chore in chores %}
+                
+                <form method='post' action="/chores/complete">
+                    <input type="hidden" name="chore_id" value="{{chore.id}}" />
+                <tr>
+                    <td>{{chore.name}}</td>
+                    <td>{{floors[chore.floor|string]}} - {{locations[chore.location|string]}}</td>
+                    <td>{{freqs[chore.freq|string]}}</td>
+                    <td>
+
+                        <div class="form-floating">
+                            <select name="default-assignee" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                              <option></option>
+                              {% for assignee in assignees %}
+                              <option value="{{assignee.id}}" {{ "selected='selected'" if assignee.id == chore.default_assignee else ""}}>{{assignee.name}}</option>
+                              {% endfor %}
+                            </select>
+                            <label for="floatingSelect">Completed by</label>
+                        </div>
+
+                    </td>
+                    <td>
+                        
+                        {% for assignee in assignees %}
+                            {% if assignee.id == chore.last_completed_by %}
+                                {{assignee.name}}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        - {{chore.last_completed_date}}</td>
+                    <td>
+                        
+                        <input type="submit" class="btn btn-primary" name="Complete"/>
+
+                    </td>
+                    
+                </tr>
+                </form>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}    
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+	});
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #cb6124; }
+    </style>
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Journal</h4>
+
+    <form method="post">
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="journal-title" {% if data %} value="{{data.title}}" {% endif %} name="journal-title">
+              <label for="journal-title">Title</label>
+            </div>
+          </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="datetime-local" class="form-control" id="journal-date" {% if data %} value="{{data.datetime}}" {% endif %} name="journal-date">
+            <label for="journal-date">Entry Date</label>
+          </div>
+        </div>    
+    </div>
+      <textarea id="editor" name='journal-entry' class="form-control">{% if data %} {{data.entry}} {% endif %}</textarea>
+        {% if data %}
+            <input type="hidden" name="id" value="{{data.id}}" />
+            <button type="submit" class="btn btn-primary" style="float: right;" name="UpdateEntry" value="Update">Update</button>
+        {% else %}
+            <button type="submit" class="btn btn-primary" style="float: right;" name="AddEntry" value="Update">Add</button>
+        {% endif %}
+</form>
+
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+       $('#editor').wysiwyg({
+            toolbar: [
+                ['mode'],
+                ['operations', ['undo', 'rendo', 'cut', 'copy', 'paste']],
+                ['styles'],
+                ['fonts', ['select', 'size']],
+                ['text', ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'font-color', 'bg-color']],
+                ['align', ['left', 'center', 'right', 'justify']],
+                ['lists', ['unordered', 'ordered', 'indent', 'outdent']],
+                ['components', ['table', /*'chart'*/]],
+                ['intervals', ['line-height', 'letter-spacing']],
+                ['insert', ['emoji', 'link', 'image', 'symbol', /*'bookmark'*/]],
+                ['special', ['print', 'unformat', 'visual', 'clean']],
+                /*['fullscreen'],*/
+            ],
+            debug: false,
+        });
+        function focusTitle() {
+			$('#journal-title').focus();
+		}
+		setTimeout(focusTitle, 1)   
+    });
+
+    </script>
+{% endblock %}

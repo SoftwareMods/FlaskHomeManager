@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Shopping</h4>
+
+    <div class="widget no-float">
+        <form method='post' action="/shopping">
+            {% if update %}
+                <input type="hidden" name="update_id" value="{{update.id}}" />
+            {% endif %}
+            <div class="row g-3">
+                <div class="col-md">
+                    <div class="form-floating">
+                        <input class="form-control" name="item-name" id="itemName"
+                        {% if update %}
+                        value="{{update.name}}"
+                        {% else %}
+                        value=""
+                        {% endif %}
+                        >
+                        <label for="itemName">Item</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <input class="form-control" name="item-location" id="itemLocation"
+                        {% if update %}
+                        value="{{update.location}}"
+                        {% else %}
+                        value=""
+                        {% endif %}
+                        >
+                        <label for="itemLocation">Location</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <input class="form-control" name="item-price" id="itemPrice"
+                        {% if update %}
+                        value="{{update.price}}"
+                        {% else %}
+                        value=""
+                        {% endif %}
+                        >
+                        <label for="itemPrice">Price</label>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row g-3" style="margin-top: -8px;">
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select class="form-select" aria-label="item-priority" name="item-priority" id="itemPriority">
+                            {% if not update %}<option></option>{% endif %}
+                            <option value="1">Low</option>
+                            <option value="2">Medium</option>
+                            <option value="3">High</option>
+                            <option value="4">Immediate</option>
+                        </select>                        
+                        <label for="itemPriority">Priority</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select class="form-select" aria-label="item-taxable" name="item-taxable" id="itemTaxable">
+                            {% if not update %}<option></option>{% endif %}
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <label for="itemTaxable">Taxable</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select class="form-select" aria-label="item-purchased" name="item-purchased" id="itemPurchased">
+                            {% if not update %}<option></option>{% endif %}
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <label for="itemPurchased">Purchased</label>
+                    </div>
+                </div>
+            </div>
+    
+            <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+            <button type="reset" class="btn btn-primary" style="margin-top: 6px;">Reset</button>
+        </form>
+    </div>
+
+    
+
+{% if myshopping %}
+{% set pri = { "1": '1-Low', "2": '2-Medium', "3": '3-High', "4": '4-Immediate' } %}
+<div class="widget no-float">
+<table class='table table-striped' id="shopping-list">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Location</th>
+            <th>Price</th>
+            <th>Priority</th>
+            <th>Taxable</th>
+            <th>Purchased Date</th>
+            <th>Purchased</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in myshopping %}
+        <tr>
+            <td>{{item.name}}</td>
+            <td>{{item.location}}</td>
+            <td>{{ "$%.2f"|format(item.price|float) }}</td>
+            <td>{{pri[item.priority]}}</td>
+            <td>{% if item.taxable == 0%}NO{%else%}YES{%endif%}</td>
+            <td>{{item.purchased_date}}</td>
+            <td>{% if item.purchased == 0%}NO{%else%}YES{%endif%}</td>
+            <td>
+
+                <!-- Delete -->
+                <a href='/shopping/delete/{{item.id}}' title="delete {{item.name}}" class="confirmation"><i
+                    class="fa-solid fa-trash-can" title='Delete {{item.name}}'></i></a>
+
+            <!-- Update -->
+            <a href='/shopping?update={{item.id}}' title="update {{item.name}}"><i class="fa-solid fa-gear"
+                    title='Update {{item.name}}'></i></a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% if location_info %}
+    <div class="widget no-float">
+        <table class="table table-striped">
+            <thead>
+                <th>Store</th>
+                <th># Items</th>
+                <th>Subtotal</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                {% for loc in location_info %}
+                    <tr>
+                        <td>{{loc}}</td>
+                        <td>{{location_info[loc]['num_items']}}</td>
+                        <td>{{ "$%.2f"|format(location_info[loc]['subtotal']|float) }}</td>
+                        <td>{{ "$%.2f"|format(location_info[loc]['total']|float) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#item-name").focus();
+        $('#shopping-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[6, "asc"],[3, "desc"],[2, "asc"]] });
+        $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+	});
+    });
+</script>
+{% endblock %}

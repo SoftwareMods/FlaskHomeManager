@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #cb6124;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Add/Modify Chores</h4>
+
+{% if not assignees %}
+<div class="widget no-float"><h5>No assignees available - Add them first under Chores > Assignees</h5></div>
+{% else %}
+<div class="widget no-float">
+    <form method='post' action="/chores-add">
+        {% if update %}
+            <input type="hidden" name="update_id" value="{{update.id}}" />
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="name" id="choreName"
+                    {% if update %}
+                    value="{{update.name}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="choreName">Chore</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="floor" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                      {% if not update %}<option></option>{% endif %}
+                      {% for floor in floors %}
+                      <option value="{{floor}}" {{ "selected='selected'" if update.floor == floor|int else ""}}>{{floors[floor]}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Floor</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="location" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        {% if not update %}<option></option>{% endif %}
+                      {% for location in locations %}
+                      <option value="{{location}}" {{ "selected='selected'" if update.location == location|int else ""}}>{{locations[location]}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Location</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3" style="margin-top: -8px;">
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="default-assignee" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        {% if not update %}<option></option>{% endif %}
+                      {% for assignee in assignees %}
+                      <option value="{{assignee.id}}" {{ "selected='selected'" if update.default_assignee == assignee.id|int else ""}}>{{assignee.name}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Default Assignee</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="difficulty" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        {% if not update %}<option></option>{% endif %}
+                      {% for diff in diffs %}
+                      <option value="{{diff}}" {{ "selected='selected'" if update.difficulty == diff|int else ""}}>{{diffs[diff]}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Difficulty</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="freq" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        {% if not update %}<option></option>{% endif %}
+                      {% for freq in freqs %}
+                      <option value="{{freq}}" {{ "selected='selected'" if update.freq == freq|int else ""}}>{{freqs[freq]}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Frequency</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+        <button type="reset" class="btn btn-primary" style="margin-top: 6px;">Reset</button>
+    </form>
+</div>
+{% endif %}
+{% if chores %}
+<div class="widget no-float">
+    <!-- list chores and allow edits -->
+    <table id="chore-list" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Floor/Location</th>
+                <th>Difficulty</th>
+                <th>Default Assignee</th>
+                <th>Frequency</th>
+                <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for chore in chores %}
+            <tr>
+                <td>{{chore.name}}</td>
+                <td>
+                    
+                    {% for floor in floors %}
+                    {% if floor|int == chore.floor %}
+                        {{floors[floor]}}
+                    {% endif %}
+                {% endfor %} - 
+                    {% for location in locations %}
+                        {% if location|int == chore.location %}
+                            {{locations[location]}}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    </td>
+                <td>
+
+                    {% for diff in diffs %}
+                        {% if diff|int == chore.difficulty %}
+                            {{diffs[diff]}}
+                        {% endif %}
+                    {% endfor %}
+
+                </td>
+                <td>
+
+                    {% for dict in assignees %}
+                        {% if dict.id == chore.default_assignee %}
+                            {{dict.name}}
+                        {% endif %}
+                    {% endfor %}
+
+                </td>
+                <td>
+
+                    {% for freq in freqs %}
+                        {% if freq|int == chore.freq %}
+                            {{freqs[freq]}}
+                        {% endif %}
+                    {% endfor %}
+
+                </td>
+                <td>
+                <!-- Delete -->
+                <a href='/chores/delete-chore/{{chore.id}}' title="delete {{chore.name}}" class="confirmation"><i
+                    class="fa-solid fa-trash-can" title='Delete {{chore.name}}'></i></a>
+                <!-- Update -->
+                <a href='/chores-add?update={{chore.id}}' title="update {{chore.name}}"><i
+                    class="fa-solid fa-gear" title='Update {{chore.name}}'></i></a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %} <!-- endif chores-->
+
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#chore-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[0, "asc"]] });
+       $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+	});
+    });
+</script>
+{% endblock %}

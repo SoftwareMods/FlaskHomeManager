@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Study</h4>
+
+<div class="widget no-float">
+    <form method='post'>
+        {% if update %}
+            <input type="hidden" name="update_id" value="{{update.id}}" />
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="study-subject" id="subjectTitle"
+                    {% if update %}
+                    value="{{update.name}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="subjectTitle">Subject</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+            </div>
+        </div>        
+
+
+    </form>
+</div>
+
+<!-- <div id="subject-form">
+    <form method="post">
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="study-subject" placeholder="Subject" />
+                </td>
+                <td>
+                    <input type="submit" value="Add Subject" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div> -->
+
+{% if mysubjects %}
+<div id="subject-list">
+    <table class="table table-striped" id="subject-review">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Questions</th>
+                <th>Score</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in mysubjects %}
+            <tr>
+                <td>{{subject.name}}</td>
+                <td style="text-align: center;">{{subject.questions|length}}</td>
+                <td style="text-align: center;">{{subject.score}}%</td>
+                <td>
+                    <!-- Add Questions -->
+                    <a href='/study/add-questions/{{subject.id}}' title="add questions to {{subject.name}}"><i
+                        class="fa-solid fa-lg fa-file-circle-plus" title='Add questions to {{subject.name}}'></i></a>
+
+                        {% if subject.questions|length > 0 %}
+                            <!-- Review -->
+                            <a href='/study/review/{{subject.id}}' title="review questions for {{subject.name}}"><i
+                                class="fa-solid fa-lg fa-file-circle-question" title='Review questions for {{subject.name}}'></i></a>
+
+                            <!-- Test -->
+                            <a href='/study/test/{{subject.id}}' title="test knowledge of {{subject.name}}"><i
+                                class="fa-solid fa-lg fa-exclamation-triangle" title='Test knowledge of {{subject.name}}'></i></a>
+                        {% endif %}
+
+                    <!-- Test -->
+                    <a href='/study/delete/{{subject.id}}' title="delete {{subject.name}}" class="confirmation"><i
+                        class="fa-solid fa-lg fa-trash-can" title='Delete {{subject.name}}'></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.confirmation').on('click', function () {
+        var title = $(this).attr('title')
+        return confirm('Are you sure you want to ' + title + '?');
+        });
+    });
+
+    $(document).ready(function () {
+        $('#subject-review').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[1, "desc"]] });
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+    {{ super() }}
+    <h1>Home Management</h1>
+    <h4>Bill Info - {{bill.name}}</h4>
+
+    <div id="bill-login">
+
+        <form method="post">
+
+            <table>
+
+                <tr><th>Login Method</th><th>Username</th><th>Password</th><th>Phone</th></tr>
+                <tr>
+                    <td>
+                        <input type="text" name="login_method" {% if bill_info %}value="{{bill_info.login_method}}"{%endif%}/>
+                    </td>
+                    <td>
+                        <input type="text" name="username" {% if bill_info %}value="{{bill_info.username}}"{%endif%}/>
+                    </td>
+                    <td>
+                        <input type="text" name="password" {% if bill_info %}value="{{bill_info.password}}"{%endif%}/>
+                    </td>
+                    <td>
+                        <input type="text" name="phone" {% if bill_info %}value="{{bill_info.phone}}"{%endif%}/>
+                    </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="submit" value="Update" class="pull-right"/>
+                </td>
+            </tr>
+
+            </table>
+
+
+        </form>
+
+
+    </div>
+
+    {% if bill_history|length > 0 %}
+    <div id="bill-history">
+
+        <table>
+            <thead>
+                <tr><th>Paid By</th><th>Due Date</th><th>Paid On</th><th>Amount</th></tr>
+            </thead>
+            <tbody>
+                {% for h in bill_history %}
+                {% if h.paid == 1 %}
+                <tr><td>{{h.paid_by}}</td><td>{{h.due_date}}</td><td>{{h.paid_date}}</td><td>{{h.amount}}</td></tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+    {% endif %}
+
+{% endblock %}
+{% block footer %}
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{# ``base.html`` is the template all our other templates derive from.
+    You can find additional information about template inheritance at
+
+    http://jinja.pocoo.org/docs/templates/#template-inheritance
+    #}
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <title>{{navigation['title']}}</title>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='Bootstrap/css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='fontawesomefree/css/all.css')}}" />
+        <script type="text/javascript" src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/extended-carousel.css')}}">
+        
+        {% if editor is defined %}
+        <link rel="stylesheet" href="{{url_for('static', filename='css/wysiwyg.css')}}">
+        {% endif %}
+
+        
+        
+
+        {% if tables is defined %}
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='Datatables/datatables.min.css')}}" />
+        {% endif %}
+        {% if charting is defined %}
+            <script type="text/javascript"
+            src="{{url_for('static', filename='Chart/chart.min.js')}}"></script>
+
+        {% endif %}
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/app.css')}}">
+        {% endblock %}
+    </head>
+
+    <body>
+        {% block nav %}
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">{{ navigation.title }}</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        {% for tab in navigation['tabs'] %}
+                            {% if 'dropdowns' in tab and tab['dropdowns'] %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton{{loop.index}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ tab.title }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{loop.index}}">
+                                    {% for name, href in tab['dropdowns'].items() %}
+                                    <li><a class="dropdown-item" href="{{ href }}">{{ name }}</a></li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ tab.link }}">{{ tab.title }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% endblock %}
+
+        <main class="container main-container">
+            {% block content %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            {% endblock %}
+        </main>
+
+        {% block footer %}{% endblock %}
+
+        {% block javascript %}
+        <script type="text/javascript" src="{{url_for('static', filename='Bootstrap/js/bootstrap.bundle.js')}}"></script>
+        {% if editor is defined %}
+        <script type="text/javascript" src="{{url_for('static', filename='js/wysiwyg.js')}}"></script>
+        {% endif %}
+            {% if editor is not defined %}
+            
+            <script type="module" src="{{url_for('static', filename='js/extended-carousel.js')}}"></script>
+            {% endif %}
+            
+            {% if tables is defined %}
+                <script type="text/javascript" src="{{url_for('static', filename='Datatables/datatables.min.js')}}"></script>
+            {% endif %}
+            <script type="text/javascript">
+                $().ready(function(){
+                    $('div.alert-warning').delay(3000);
+                    $('div.alert-warning').hide(500);
+                });
+                $().ready(function(){
+                    $('div.alert-info').delay(3000);
+                    $('div.alert-info').hide(500);
+                });
+                $().ready(function(){
+                    $('div.alert-success').delay(3000);
+                    $('div.alert-success').hide(500);
+                });
+            </script>
+        {% endblock %}
+    </body>
+
+    </html>

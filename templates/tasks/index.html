@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Add/Update Tasks</h4>
+<div class="widget no-float">
+    <form name='add-task-form' method='post' action="/tasks">
+    <div class="row g-3">
+        <div class="col-md">
+            <div class="form-floating">
+                
+                {% if update_task %}
+                    <input type="hidden" name="task_id" value="{{update_task.id}}" />
+                {% endif %}
+                <input class="form-control" name="new-task" id="taskName"
+                {% if update_task %}
+                value="{{update_task.task_name}}"
+                {% else %}
+                value=""
+                {% endif %}
+                >
+                <label for="taskName">Task</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                <input class="form-control" name="task-due" id="taskDue"
+                {% if update_task %}
+                value="{{update_task.task_due}}"
+                {% else %}
+                value=""
+                {% endif %}
+                >
+                <label for="taskDue">Due</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                <select name="task-complete" class="form-select" id="taskComplete" aria-label="Floating label select example">
+                    {% if not update_task %}<option></option>{% endif %}
+                    <option value="0" {{ "selected='selected'" if update_task.complete|string == "0" else ""}}>No</option>
+                    <option value="1" {{ "selected='selected'" if update_task.complete|string == "1" else ""}}>Yes</option>
+                </select>
+                <label for="taskComplete">Completed</label>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+    {% if not update_task %}
+    <button type="reset" class="btn btn-primary" style="margin-top: 6px;">Reset</button>
+    {% endif %}
+    </form>
+</div>
+
+{% if tasks %}
+<div class="widget no-float">
+<table class='table table-striped' id="task-list">
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Due</th>
+            <th>Completed</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if tasks %}
+        {% for task in tasks %}
+        <tr>
+            <td>{{task.task_name}}</td>
+            <td>{{task.task_due}}</td>
+            <td>{% if task.complete == 1 %}YES{% else %}NO{% endif %}</td>
+            <td>
+
+                <!-- Delete -->
+                <a href='/tasks/delete/{{task.id}}' title="delete {{task.task_name}}" class="confirmation"><i
+                        class="fa-solid fa-trash-can" title='Delete {{task.task_name}}'></i></a>
+
+                <!-- Update -->
+                <a href='/tasks?update={{task.id}}' title="update {{task.task_name}}"><i
+                    class="fa-solid fa-gear" title='Update {{task.task_name}}'></i></a>
+
+                {% if task.complete == 0 %}
+                <!-- Mark as complete -->
+                <a href='/tasks/complete/{{task.id}}' title="mark {{task.task_name}} as complete"
+                    class="confirmation"><i class="fa-solid fa-check"
+                        title='Mark {{task.task_name}} as complete'></i></a>
+                {%else%}
+                <!-- Mark as incomplete -->
+                <a href='/tasks/incomplete/{{task.id}}' title="mark {{task.task_name}} as incomplete"
+                    class="confirmation"><i class="fa-solid fa-xmark"
+                        title='Mark {{task.task_name}} as incomplete'></i></a>
+                {% endif %}
+
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+{% endblock %}
+{% block footer %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#new-task").focus();
+        $('#task-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[2, "asc"],[1,"asc"]] });
+        $('.confirmation').on('click', function () {
+            var title = $(this).attr('title')
+            return confirm('Are you sure you want to ' + title + '?');
+	});
+    });
+</script>
+{% endblock %}
