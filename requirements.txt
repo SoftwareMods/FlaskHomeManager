@@ -1,0 +1,4 @@
+flask
+flask_talisman
+cryptography
+waitress
