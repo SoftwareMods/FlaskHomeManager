@@ -220,4 +220,17 @@ def delete_assignee(id):
 def delete_chore(id):
     """Delete given chore"""
 
+    deleted = False
+    chores = loadJSONFromFile(chore_file)
+    for i in range(len(chores)):
+        if chores[i]['id'] == id:
+            del chores[i]
+            saveJSONToFile(chore_file, chores)
+            deleted = True
+            break
+
+    if deleted:
+        flash('Successfully deleted chore', 'success')
+    else:
+        flash('Failed to delete chore', 'error')
     return redirect(f"/chores-add")
