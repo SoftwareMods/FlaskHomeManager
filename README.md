@@ -29,16 +29,23 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
  View chores that are due today based on frequency of chore and last completed date
 
 ### Tasks
+Add / Delete / Update list of single completion tasks
 
 ### Shopping
+Add / Delete / Update list of items needing purchased
 
 ### Bills
+Add / Delete / Update list of bills to be managed
 
 ### School
+Future development
 
 ### Study
+Add subjects for study with questions and index style cards to review
 
 ### Journal
+Add / View journal entries
 
 ### Development
+List of font awesome icons available for future development
 
