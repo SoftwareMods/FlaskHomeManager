@@ -5,7 +5,7 @@ By default a python environment is setup for you under serve.sh with the followi
 python3 -m venv ../virtual_env
 source ../virtual_env/Scripts/activate
 ```
-Before running serve.sh run these lines then run
+Before running serve.sh run these lines the above lines, then:
 ```
 pip install flask
 pip install flask_talisman
