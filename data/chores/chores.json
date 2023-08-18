@@ -1,1 +1,1 @@
-[]
+[{"id": 1, "name": "Demo Chore", "floor": 2, "location": 5, "default_assignee": 1, "freq": 1, "difficulty": 2, "last_completed_date": "", "last_completed_by": null, "completed_dates": []}]
