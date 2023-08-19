@@ -22,7 +22,16 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
 
 ### Chores
 	Assignees
- Add / View / Update list of available assignees for chore assignment
+ Add / View / Update list of available assignees for chore assignment<br>
+ The options for chore difficutly are defined in data/chores/diff.json as:<br>
+ <ul>
+	 <li>1 - Trivial</li>
+	 <li>2 - Easy</li>
+	 <li>3 - Moderate</li>
+	 <li>4 - Hard</li>
+ </ul>
+ The difficulty is multiplied by 0.25 (defined in routes/chores.py) and added to assignee bank on chore completion.
+ 
  ![home_management_assignees](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/52e5b532-8521-4c82-ad26-809809dcc3b6)
 
  
