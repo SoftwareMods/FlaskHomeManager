@@ -102,7 +102,6 @@
             <th>Paid By</th>
             <th>Due</th>
             <th>Amount</th>
-            <th>Past Due</th>
             <th>Paid</th>
             <th>Paid Date</th>
             <th>Actions</th>
@@ -115,7 +114,6 @@
             <td>{{bill.paid_by}}</td>
             <td>{{bill.due_date}}</td>
             <td>{{"$%.2f"|format(bill.amount|float)}}</td>
-            <td>{{bill.past_due}}</td>
             <td>{% if bill.paid == 1 %}YES{% else %}NO{% endif %}</td>
             <td>{{bill.paid_date}}</td>
             <td>
