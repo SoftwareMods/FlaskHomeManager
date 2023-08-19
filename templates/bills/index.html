@@ -114,7 +114,7 @@
             <td>{{bill.name}}</td>
             <td>{{bill.paid_by}}</td>
             <td>{{bill.due_date}}</td>
-            <td>{{bill.amount}}</td>
+            <td>{{"$%.2f"|format(bill.amount|float)}}</td>
             <td>{{bill.past_due}}</td>
             <td>{% if bill.paid == 1 %}YES{% else %}NO{% endif %}</td>
             <td>{{bill.paid_date}}</td>
@@ -164,7 +164,7 @@
                     <tr>
                         <td>{{entry}}</td>
                         <td>{{key}}</td>
-                        <td>{{upcoming_bills[date][key][entry]}}</td>
+                        <td>{{"$%.2f"|format(upcoming_bills[date][key][entry]|float)}}</td>
                     </tr>
                     {% endfor %}
                 {% endfor %}

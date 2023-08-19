@@ -26,7 +26,7 @@
 
                                 <td>{{bill.name}}</td>
                                 <td>{{bill.due_date}}</td>
-                                <td>{{bill.amount}}</td>
+                                <td>{{"$%.2f"|format(bill.amount|float)}}</td>
 
 
                         </tr>
@@ -52,7 +52,7 @@
                         <tr>
 
                                 <td>{{item.name}}</td>
-                                <td>{{"$%.2f"|format(item.price)}}</td>
+                                <td>{{"$%.2f"|format(item.price|float)}}</td>
                                 <td>{{item.location}}</td>
 
 
