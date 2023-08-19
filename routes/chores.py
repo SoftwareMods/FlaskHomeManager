@@ -137,7 +137,8 @@ def complete_chore():
                 # get list of diffs
                 payout_name = diffs[str(difficulty)] + '_payout'
                 payout_name = payout_name.lower()
-                to_bank = difficulty * float(system_settings[payout_name])
+                percent_earned = int(request.form.get('percent-completed')) / 100
+                to_bank = float(system_settings[payout_name]) * percent_earned
                 break
         if saveJSONToFile(chore_file, chores):
             flash(f"Successfully marked {chore_name} as completed", "success")

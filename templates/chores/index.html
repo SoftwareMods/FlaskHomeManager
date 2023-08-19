@@ -23,6 +23,7 @@
                     <th>Floor/Location</th>
                     <th>Frequency</th>
                     <th>Assigned To</th>
+                    <th>% Completed</th>
                     <th>Last Completed</th>
                     <th>Mark As Complete</th>
                     </tr>
@@ -32,7 +33,7 @@
                 
                 <form method='post' action="/chores/complete">
                     <input type="hidden" name="chore_id" value="{{chore.id}}" />
-                <tr>
+                <tr style='vertical-align: middle;'>
                     <td>{{chore.name}}</td>
                     <td>{{floors[chore.floor|string]}} - {{locations[chore.location|string]}}</td>
                     <td>{{freqs[chore.freq|string]}}</td>
@@ -50,6 +51,18 @@
 
                     </td>
                     <td>
+
+                        <div class="form-floating">
+                            <select name="percent-completed" class="form-select" id="percentSelect" aria-label="Floating label select example">
+                              {% set percs = ['10','20','25','30','40','50','60','70','75','80','90','100'] %}
+                              {% for perc in percs %}
+                                <option value="{{perc}}" {{ "selected='selected'" if perc == '100' }}>{{perc}}%</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+
+                    </td>
+                    <td>
                         
                         {% for assignee in assignees %}
                             {% if assignee.id == chore.last_completed_by %}
@@ -58,9 +71,9 @@
                         {% endfor %}
                         
                         - {{chore.last_completed_date}}</td>
-                    <td>
+                    <td style="text-align: left;">
                         
-                        <input type="submit" class="btn btn-primary" name="Complete"/>
+                        <input type="submit" style="padding: 10px 33px;" class="btn btn-primary" value="Complete"/>
 
                     </td>
                     
