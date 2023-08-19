@@ -56,7 +56,9 @@ Add / Delete / Update list of items needing purchased<br>
 
 
 ### Bills
-Add / Delete / Update list of bills to be managed
+Add / Delete / Update list of bills to be managed<br>
+![home_management_bills](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/156580b2-14c1-45f9-8492-496bddbdc2ac)
+
 
 ### School
 Future development
