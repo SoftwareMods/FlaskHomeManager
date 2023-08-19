@@ -46,7 +46,9 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
 
 
 ### Tasks
-Add / Delete / Update list of single completion tasks
+Add / Delete / Update list of single completion tasks<br>
+![home_management_tasks](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/f952ce4d-195a-4469-b31e-510871b7aae4)
+
 
 ### Shopping
 Add / Delete / Update list of items needing purchased
