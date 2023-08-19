@@ -11,6 +11,7 @@ from flask import (
 from markupsafe import escape
 from helpers.common import render_template, redirect, saveJSONToFile, getNewId
 from helpers.chores import *
+from helpers.settings import *
 from datetime import date
 
 chores = Blueprint("chores", __name__)
@@ -67,7 +68,7 @@ def add_chore():
                 "difficulty": int(request.form.get("difficulty")),
                 "last_completed_date": "",
                 "last_completed_by": None,
-                "completed_dates": []
+                "completed_dates": [],
             }
             chores.append(new_chore)
         else:
@@ -116,6 +117,7 @@ def complete_chore():
     """Process for completing chore"""
     chores = getChores()
     assignees = getAssignees()
+    diffs = loadJSONFromFile(diffs_file)
 
     if request.method == "POST":
         by_id = int(request.form.get("default-assignee"))
@@ -132,7 +134,10 @@ def complete_chore():
                 chores[i]["completed_dates"].append({"date": today_str, "by": by_id})
                 difficulty = chores[i]["difficulty"]
                 chore_name = chores[i]["name"]
-                to_bank = difficulty * 0.25
+                # get list of diffs
+                payout_name = diffs[str(difficulty)] + '_payout'
+                payout_name = payout_name.lower()
+                to_bank = difficulty * float(system_settings[payout_name])
                 break
         if saveJSONToFile(chore_file, chores):
             flash(f"Successfully marked {chore_name} as completed", "success")
@@ -194,7 +199,11 @@ def assignees():
             update = request.args.get("update")
 
     return render_template(
-        "chores/assignees.html", update=update, assignees=assignees, sidebar=True
+        "chores/assignees.html",
+        update=update,
+        assignees=assignees,
+        system_settings=loadJSONFromFile(settings_file),
+        sidebar=True,
     )
 
 
@@ -223,14 +232,14 @@ def delete_chore(id):
     deleted = False
     chores = loadJSONFromFile(chore_file)
     for i in range(len(chores)):
-        if chores[i]['id'] == id:
+        if chores[i]["id"] == id:
             del chores[i]
             saveJSONToFile(chore_file, chores)
             deleted = True
             break
 
     if deleted:
-        flash('Successfully deleted chore', 'success')
+        flash("Successfully deleted chore", "success")
     else:
-        flash('Failed to delete chore', 'error')
+        flash("Failed to delete chore", "error")
     return redirect(f"/chores-add")

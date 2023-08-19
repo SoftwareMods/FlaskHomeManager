@@ -5,6 +5,7 @@ from flask import Blueprint, flash, redirect, request, session, Response # last 
 from markupsafe import escape
 from helpers.common import render_template, loadJSONFromFile, saveJSONToFile, getNewId
 from helpers.shopping import shopping_file, sales_tax
+from helpers.settings import system_settings
 
 shopping = Blueprint('shopping', __name__)
 
@@ -84,7 +85,7 @@ def index():
                 location_info[location]['total'] = "?"
 
 
-    return render_template('shopping/index.html', sidebar=True, tables=True, update=update, location_info=location_info, myshopping=loadJSONFromFile(shopping_file))
+    return render_template('shopping/index.html', sidebar=True, tables=True, system_settings=system_settings, update=update, location_info=location_info, myshopping=loadJSONFromFile(shopping_file))
 
 @shopping.route("/shopping/delete/<int:id>", methods=["GET", "POST"])
 def delete_item(id):

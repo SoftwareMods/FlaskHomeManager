@@ -12,5 +12,6 @@ NAVIGATION = {
         {'title': 'Study', 'link': '/study'},
         {'title': 'Journal', 'link': '', 'dropdowns': {'New Entry': '/journal', 'List Entries': '/journal/list'}},
         {'title': 'Development', 'link': '', 'dropdowns': {'Icons': '/icons'}},
+        {'title': 'Settings', 'link': '/settings'},
     ]
 }

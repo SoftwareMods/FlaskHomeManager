@@ -84,7 +84,7 @@
             <tr>
                 <td>{{assignee.name}}</td>
                 <td>{{assignee.bedtime}}</td>
-                <td>{{ "$%.2f"|format(assignee.bank) }}</td>
+                <td>{{system_settings.currency}}{{ "%.2f"|format(assignee.bank) }}</td>
                 <td>
                 <!-- Delete -->
                 <a href='/chores/delete-assignee/{{assignee.id}}' title="delete {{assignee.name}}" class="confirmation"><i

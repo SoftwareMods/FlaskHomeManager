@@ -5,6 +5,7 @@ from flask import Blueprint, flash, request, session, Response # last one use fo
 from markupsafe import escape
 from helpers.common import redirect, render_template, loadJSONFromFile, saveJSONToFile, getNewId
 from helpers.bills import bill_file, bill_info_file, getBillInfo, getBillHistory
+from helpers.settings import *
 
 bills = Blueprint('bills', __name__)
 
@@ -86,7 +87,7 @@ def index():
                 if mybills[i]['id'] == update_id:
                     update = mybills[i]
 
-    return render_template('bills/index.html', sidebar=True, tables=True, bills=loadJSONFromFile(bill_file), update=update, upcoming_bills=upcoming_bills)
+    return render_template('bills/index.html', sidebar=True, tables=True, system_settings=loadJSONFromFile(settings_file) , bills=loadJSONFromFile(bill_file), update=update, upcoming_bills=upcoming_bills)
 
 @bills.route('/bills/delete/<int:bill_id>', methods=['GET','POST'])
 def delete_bill(bill_id):

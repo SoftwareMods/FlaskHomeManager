@@ -8,6 +8,7 @@ from routes.journal import journal
 from routes.school import school
 from routes.study import study
 from routes.shopping import shopping
+from routes.settings import settings
 
 from flask import Flask, session
 from flask_talisman import Talisman
@@ -34,7 +35,7 @@ app.register_blueprint(journal)
 app.register_blueprint(school)
 app.register_blueprint(study)
 app.register_blueprint(shopping)
-
+app.register_blueprint(settings)
 
 csp = {
         'default-src': "'self' http://localhost:8081 data: 'unsafe-inline'",

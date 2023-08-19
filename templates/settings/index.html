@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+{{ super() }}
+<h1>Home Management</h1>
+<h4>Settings</h4>
+
+<div class="widget no-float">
+    <form method="post">
+        <table class='table table-striped' id="settings-list">
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <tr>
+                    <td>Currency Symbol</td>
+                    <td><input type="text" class="form-control" name="currency" value="{{system_settings.currency}}" />
+                    </td>
+                </tr>
+                <tr>
+                    <th  style="background-color: #4e7093; color: #fff" colspan="2">Chore payouts</th>
+                </tr>
+                {% for diff in diffs %}
+                <tr>
+                    <td>{{diffs[diff]}}</td>
+                    <td><input type="text" class="form-control" name="{{diffs[diff]|lower}}_payout" 
+                    {% for setting in system_settings %}
+                    {% if "_payout" in setting  and diffs[diff]|lower in setting %}    
+                        value="{{system_settings[setting]}}" 
+                    {% endif %}
+                    {% endfor %}/>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="2">
+                        <div class="row g-2">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+
+{% endblock %}
+{% block footer %}
+{% endblock %}

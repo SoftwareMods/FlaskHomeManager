@@ -22,10 +22,10 @@ from helpers.tasks import task_file
 from helpers.bills import bill_file
 from helpers.chores import *
 from helpers.shopping import shopping_file
+from helpers.settings import *
 from nav import NAVIGATION
 
 frontend = Blueprint("frontend", __name__)
-
 
 # Our index-page just shows a quick explanation. Check out the template
 # "templates/index.html" documentation for more details.
@@ -50,7 +50,8 @@ def index():
         chores=chores,
         tasks=tasks,
         bills=bills,
-        shopping=shopping_list
+        shopping=shopping_list,
+        system_settings=loadJSONFromFile(settings_file)
     )
 
 

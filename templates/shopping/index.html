@@ -114,7 +114,7 @@
         <tr>
             <td>{{item.name}}</td>
             <td>{{item.location}}</td>
-            <td>{{ "$%.2f"|format(item.price|float) }}</td>
+            <td>{{system_settings.currency}}{{ "%.2f"|format(item.price|float) }}</td>
             <td>{{pri[item.priority]}}</td>
             <td>{% if item.taxable == 0%}NO{%else%}YES{%endif%}</td>
             <td>{{item.purchased_date}}</td>
@@ -150,8 +150,8 @@
                     <tr>
                         <td>{{loc}}</td>
                         <td>{{location_info[loc]['num_items']}}</td>
-                        <td>{{ "$%.2f"|format(location_info[loc]['subtotal']|float) }}</td>
-                        <td>{{ "$%.2f"|format(location_info[loc]['total']|float) }}</td>
+                        <td>{{system_settings.currency}}{{ "%.2f"|format(location_info[loc]['subtotal']|float) }}</td>
+                        <td>{{system_settings.currency}}{{ "%.2f"|format(location_info[loc]['total']|float) }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

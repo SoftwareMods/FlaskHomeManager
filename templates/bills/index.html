@@ -6,7 +6,6 @@
 {{ super() }}
 <h1>Home Management</h1>
 <h4>Bills</h4>
-
 <div class="widget no-float">
     <form method='post' action="/bills">
         {% if update %}
@@ -113,7 +112,7 @@
             <td>{{bill.name}}</td>
             <td>{{bill.paid_by}}</td>
             <td>{{bill.due_date}}</td>
-            <td>{{"$%.2f"|format(bill.amount|float)}}</td>
+            <td>{{system_settings.currency}}{{"%.2f"|format(bill.amount|float)}}</td>
             <td>{% if bill.paid == 1 %}YES{% else %}NO{% endif %}</td>
             <td>{{bill.paid_date}}</td>
             <td>
@@ -162,7 +161,7 @@
                     <tr>
                         <td>{{entry}}</td>
                         <td>{{key}}</td>
-                        <td>{{"$%.2f"|format(upcoming_bills[date][key][entry]|float)}}</td>
+                        <td>{{system_settings.currency}}{{"%.2f"|format(upcoming_bills[date][key][entry]|float)}}</td>
                     </tr>
                     {% endfor %}
                 {% endfor %}
