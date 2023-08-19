@@ -65,9 +65,17 @@ Future development
 
 ### Study
 Add subjects for study with questions and index style cards to review
+![home_management_study_index](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/d914e179-15d0-458f-8363-32e4a670e335)
+![home_management_study_review](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/c9664030-8d84-4c14-bd7f-601bf22ec0bf)
 
 ### Journal
 Add / View journal entries
+![home_management_study_journal_add](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/568b5886-e822-4d6b-9813-1b708222afbf)
+![home_management_study_journal_list](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/31376298-e9f0-4f43-b29e-acfec67648b8)
+
+
 
 ### Development
 List of font awesome icons available for future development
+![home_management_study_dev](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/324f7378-aea2-4c75-ba44-db99c30fcd0d)
+
