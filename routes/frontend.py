@@ -10,6 +10,7 @@ from markupsafe import escape
 from helpers.common import render_template, loadJSONFromFile
 from helpers.tasks import task_file
 from helpers.bills import bill_file
+from helpers.chores import *
 from nav import NAVIGATION
 
 frontend = Blueprint('frontend', __name__)
@@ -20,10 +21,14 @@ frontend = Blueprint('frontend', __name__)
 def index():
     """"default landing page"""
 
-    mytasks = loadJSONFromFile(task_file)
-    mybills = loadJSONFromFile(bill_file)
+    tasks = loadJSONFromFile(task_file)
+    bills = loadJSONFromFile(bill_file)
+    chores = getDueChores()
+    floors = loadJSONFromFile(floors_file)
+    locations = loadJSONFromFile(locations_file)
+    assignees = loadJSONFromFile(assignee_file)
 
-    return render_template('index.html', tables=True, tasks=mytasks, bills=mybills)
+    return render_template('index.html', floors=floors, locations=locations, assignees=assignees, tables=True, chores=chores, tasks=tasks, bills=bills)
 
 @frontend.route('/icons')
 def icons():

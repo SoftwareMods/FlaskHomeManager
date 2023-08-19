@@ -6,35 +6,10 @@
     {{ super() }}
     <h1 >Home Management</h1>
 
-<!--Tasks-->
-{% if tasks %}
-<div class="widget">
-<table class='table table-striped' id="task-list-home">
-    <thead>
-        <tr>
-            <th>Incomplete Tasks</th>
-            <th>Due</th>
-        </tr>
-    </thead>
-    <tbody>
-
-            {% for task in tasks %}
-                {% if task.complete == 0 %}
-                <tr>
-                    <td>{{task.task_name}}</td>
-                    <td>{{task.task_due}}</td>
-                </tr>
-                {% endif %}
-
-            {% endfor %}
-    </tbody>
-</table>
-</div>
-{% endif %}
-
-<!--Unpaid Bills-->
+    <!--Unpaid Bills-->
 {% if bills %}
-<div class="widget">
+<div class="row g-1">
+    <div class="col-md widget no-float">
 <table class='table table-striped' id="bill-list-home">
     <thead>
         <tr>
@@ -60,17 +35,79 @@
     </tbody>
 </table>
 </div>
+</div>
 {% endif %}
+
+<div class="row g-2">
+<!--Chores-->
+{% if chores %}
+<div class="col-md widget no-float">
+<table class='table table-striped' id="chore-list-home">
+    <thead>
+        <tr>
+            <th>Chore</th>
+            <th>Floor/Location</th>
+            <th>Assigned To</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            {% for chore in chores %}
+                <tr>
+                    <td>{{chore.name}}</td>
+                    <td>{{floors[chore.floor|string]}} - {{locations[chore.location|string]}}</td>
+                    <td>{% for assignee in assignees %}
+                        {% if assignee.id == chore.default_assignee %}
+                            {{assignee.name}}
+                        {% endif %}
+                    {% endfor %}</td>
+                </tr>
+                
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+
+<!--Tasks-->
+{% if tasks %}
+<div class="col-md widget no-float">
+<table class='table table-striped' id="task-list-home">
+    <thead>
+        <tr>
+            <th>Incomplete Tasks</th>
+            <th>Due</th>
+        </tr>
+    </thead>
+    <tbody>
+
+            {% for task in tasks %}
+                {% if task.complete == 0 %}
+                <tr>
+                    <td>{{task.task_name}}</td>
+                    <td>{{task.task_due}}</td>
+                </tr>
+                {% endif %}
+
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+
+</div>
+
+
 
 
 {% endblock %}
 {% block footer %}
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#bill-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[1, "asc"],[0, "asc"]] });
-    });
-    $(document).ready(function () {
-        $('#task-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[1, "asc"],[0, "asc"]] });
+        $('#bill-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
+        $('#task-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
+        $('#chore-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
     });
 </script>
 {% endblock %}
