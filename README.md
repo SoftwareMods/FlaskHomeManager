@@ -17,7 +17,8 @@ To start the application IN DEBUG MODE call debug_serve.sh
 /path/to/debug_serve.sh
 ```
 In your browser, navigate to localhost:8081 (or whatever port you have defined in serve.sh)
-![home_management_homepage](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/38edfd38-b9f3-4f6d-a9ab-5264153f9322)
+![home_management_homepage](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/8ae6814d-c4f1-4dfb-98a2-b31e51adf396)
+
 
 
 ### Chores
