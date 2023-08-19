@@ -41,7 +41,9 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
 
 	
  	View Chores
- View chores that are due today based on frequency of chore and last completed date
+ View chores that are due today based on frequency of chore and last completed date<br>
+ ![home_management_chores_todo](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/ae47f62d-b02d-4c70-84bc-1a99108465e4)
+
 
 ### Tasks
 Add / Delete / Update list of single completion tasks
