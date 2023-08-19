@@ -51,7 +51,9 @@ Add / Delete / Update list of single completion tasks<br>
 
 
 ### Shopping
-Add / Delete / Update list of items needing purchased
+Add / Delete / Update list of items needing purchased<br>
+![home_management_shopping](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/a434c92e-c3bd-487f-85b8-abe1f87e3f77)
+
 
 ### Bills
 Add / Delete / Update list of bills to be managed
