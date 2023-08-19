@@ -36,7 +36,9 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
 
  
  	Add Chore
- Add / View / Update list of chores
+ Add / View / Update list of chores<br>
+ ![home_management_new_chore](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/c5660720-c0df-4e6a-b1c9-a42745d32496)
+
 	
  	View Chores
  View chores that are due today based on frequency of chore and last completed date
