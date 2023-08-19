@@ -126,8 +126,6 @@ h4, h1 { margin-left: 8px; }
 	padding: 2px 16px;
 }
 #subject-list, #subject-form {
-	float: left;
-	width: 100%;
 	background-color: #C0C0C0;
 	margin: 10px;
 	border-radius: 4px;

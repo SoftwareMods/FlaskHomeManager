@@ -11,6 +11,7 @@
     <h4>Journal Entries</h4>
 
     {% if entries %}
+    <div class="widget no-float">
 <table class='table table-striped' id="entry-list">
     <thead>
         <tr>
@@ -41,6 +42,7 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% endif %}
 
 {% endblock %}
