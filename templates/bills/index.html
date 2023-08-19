@@ -177,7 +177,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#bill-name").focus();
-        $('#bill-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[5, "asc"], [2, "asc"]] });
+        $('#bill-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[4, "asc"], [2, "asc"], [0, "asc"]] });
         $('#upcoming-bills').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"]] });
         $('.confirmation').on('click', function () {
             var title = $(this).attr('title')
