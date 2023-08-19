@@ -26,13 +26,17 @@
           </div>
         </div>    
     </div>
+    <div class="row">
       <textarea id="editor" name='journal-entry' class="form-control">{% if data %} {{data.entry}} {% endif %}</textarea>
-        {% if data %}
+    </div>
+    <div class="row g-1">
+      {% if data %}
             <input type="hidden" name="id" value="{{data.id}}" />
             <button type="submit" class="btn btn-primary" style="float: right;" name="UpdateEntry" value="Update">Update</button>
         {% else %}
             <button type="submit" class="btn btn-primary" style="float: right;" name="AddEntry" value="Update">Add</button>
         {% endif %}
+        </div>
 </form>
 </div>
 
