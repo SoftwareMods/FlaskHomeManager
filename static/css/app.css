@@ -74,11 +74,6 @@ body {
 	padding: 8px;
 	margin: 10px 0;
 }
-#upcoming-bills-widget {
-	width: 70%;
-	margin-right: -10px;
-	float: right;
-}
 .widget {
 	float: left;
 	min-width: 200px;
