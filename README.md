@@ -31,7 +31,7 @@ In your browser, navigate to localhost:8081 (or whatever port you have defined i
 	 <li>3 - Moderate</li>
 	 <li>4 - Hard</li>
  </ul>
- The difficulty is multiplied by 0.25 (defined in routes/chores.py) and added to assignee bank on chore completion.
+ The difficulty is multiplied by the difficulty payout amount (defined on new Settings page) and added to assignee bank on chore completion.
  
  ![home_management_assignees](https://github.com/SoftwareMods/FlaskHomeManager/assets/7725472/52e5b532-8521-4c82-ad26-809809dcc3b6)
 
