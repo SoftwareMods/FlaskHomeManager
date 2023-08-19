@@ -109,7 +109,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#new-task").focus();
-        $('#task-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[2, "asc"],[1,"asc"]] });
+        $('#task-list').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 10, "order": [[2, "asc"],[1,"desc"]] });
         $('.confirmation').on('click', function () {
             var title = $(this).attr('title')
             return confirm('Are you sure you want to ' + title + '?');

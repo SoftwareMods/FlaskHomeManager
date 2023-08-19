@@ -7,49 +7,90 @@
 <h1>Home Management</h1>
 <h4>Bills</h4>
 
-<div class="widget-add-bill">
-    <div class='widget-title'>{% if update_bill %}Update{%else%}Add{%endif%} Bill</div>
-    <form name='add-bill-form' method='post' action="/bills">
-    {% if update_bill %}
-        <input type="hidden" name="bill_id" value="{{update_bill.id}}" />
-    {% endif %}
-    <input class="form-control form-control-sm" name="bill-name" id="bill-name" type="text" placeholder="Name" {% if update_bill %} value="{{update_bill.name}}" {% endif %} aria-label=".form-control-sm example">
-    <input class="form-control form-control-sm" name="paid-by" id="bill-paid-by" type="text" placeholder="Paid By" {% if update_bill %}value="{{update_bill.paid_by}}" {%endif%} aria-label=".form-control-sm example">
-    <input class="form-control form-control-sm" name="bill-due" id="bill-due" type="text" placeholder="Due" {% if update_bill %}value="{{update_bill.due_date}}" {%endif%} aria-label=".form-control-sm example">
-    <input class="form-control form-control-sm" name="bill-amount" id="bill-amount" type="text" placeholder="Amount" {% if update_bill %}value="{{update_bill.amount}}" {%endif%} aria-label=".form-control-sm example">
-    <input class="form-control form-control-sm" name="bill-past-due" id="bill-past-due" type="text" placeholder="Past Due" {% if update_bill %}value="{{update_bill.past_due}}" {%endif%} aria-label=".form-control-sm example">
-    <input class="form-control form-control-sm" name="bill-paid-date" id="bill-paid-date" type="text" placeholder="Paid on" {% if update_bill %}value="{{update_bill.paid_date}}" {%endif%}aria-label=".form-control-sm example">
-    <span style="padding-left: 6px;">Paid</span><input type='checkbox' name='bill-paid' id="bill-paid" {{ "checked='checked'" if update_bill.paid else "" }} />
-    <button type="submit"
-            class="btn btn-primary"
-            style="float: right;"
-            name="{% if update_bill %}UpdateBill{%else%}AddBill{%endif%}"
-            value="{% if update_bill %}Update{%else%}Add{%endif%}">
-            {% if update_bill %}Update{%else%}Add{%endif%}
-    </button>
-</div>
+<div class="widget no-float">
+    <form method='post' action="/bills">
+        {% if update %}
+            <input type="hidden" name="update_id" value="{{update.id}}" />
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bill-name" id="billName"
+                    {% if update %}
+                    value="{{update.name}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="billName">Bill</label>
+                </div>
+            </div>
+            <div class="col-md">
+                    <div class="form-floating">
+                        <input class="form-control" name="paid-by" id="billPaidBy"
+                        {% if update %}
+                        value="{{update.paid_by}}"
+                        {% else %}
+                        value=""
+                        {% endif %}
+                        >
+                        <label for="billPaidBy">Paid By</label>
+                    </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bill-due" id="billDueDate"
+                    {% if update %}
+                    value="{{update.due_date}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="billDueDate">Due Date</label>
+                </div>
+            </div>
+        </div>
 
-<div class="widget" id="upcoming-bills-widget">
-    <table class="table table-striped" id="upcoming-bills">
-        <thead>
-            <th>Paid By</th>
-            <th>Due</th>
-            <th>Total</th>
-        </thead>
-        <tbody>
-            {% for date in upcoming_bills %}
-                {% for key in upcoming_bills[date] %}
-                    {% for entry in upcoming_bills[date][key] %}
-                    <tr>
-                        <td>{{entry}}</td>
-                        <td>{{key}}</td>
-                        <td>{{upcoming_bills[date][key][entry]}}</td>
-                    </tr>
-                    {% endfor %}
-                {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="row g-3" style="margin-top: -8px;">
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bill-amount" id="billAmount"
+                    {% if update %}
+                    value="{{update.amount}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="billAmount">Amount</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <input class="form-control" name="bill-paid-date" id="billDatePaid"
+                    {% if update %}
+                    value="{{update.paid_date}}"
+                    {% else %}
+                    value=""
+                    {% endif %}
+                    >
+                    <label for="billDatePaid">Date Paid</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="bill-paid" class="form-select" id="paidSelect" aria-label="Floating label select example">
+                        {% if not update %}<option></option>{% endif %}
+                        <option value="0" {{ "selected='selected'" if update.paid else "" }}>No</option>
+                        <option value="1" {{ "selected='selected'" if update.paid else "" }}>Yes</option>
+                    </select>
+                    <label for="paidSelect">Paid</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 6px;">Submit</button>
+        <button type="reset" class="btn btn-primary" style="margin-top: 6px;">Reset</button>
+    </form>
 </div>
 
 {% if bills %}
@@ -107,6 +148,29 @@
 
     </tbody>
 </table>
+</div>
+
+<div class="widget" id="upcoming-bills-widget">
+    <table class="table table-striped" id="upcoming-bills">
+        <thead>
+            <th>Paid By</th>
+            <th>Due</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% for date in upcoming_bills %}
+                {% for key in upcoming_bills[date] %}
+                    {% for entry in upcoming_bills[date][key] %}
+                    <tr>
+                        <td>{{entry}}</td>
+                        <td>{{key}}</td>
+                        <td>{{upcoming_bills[date][key][entry]}}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endif %}
 

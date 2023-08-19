@@ -4,7 +4,7 @@ NAVIGATION = {
     'title': 'Home Management',
     'tabs':
     [
-        {'title': 'Chores', 'link': '', 'dropdowns': {'To Do': '/chores','Add': '/chores-add', 'Assignees': '/chores-assignees'}},
+        {'title': 'Chores', 'link': '', 'dropdowns': {'To Do': '/chores','Add / Modify': '/chores-add', 'Assignees': '/chores-assignees'}},
         {'title': 'Tasks', 'link': '/tasks'},
         {'title': 'Shopping', 'link': '/shopping'},
         {'title': 'Bills', 'link': '/bills'},

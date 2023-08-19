@@ -14,7 +14,7 @@ bills = Blueprint('bills', __name__)
 def index():
     """"default landing page"""
 
-    update_bill = False
+    update = False
     mybills = loadJSONFromFile(bill_file)
 
     upcoming_bills = { 'due_dates': {} }
@@ -34,8 +34,8 @@ def index():
 
     if request.method == 'POST':
 
-        if request.form.get('UpdateBill'):
-            bill_id = int(request.form.get('bill_id'))
+        if request.form.get('update_id'):
+            bill_id = int(request.form.get('update_id'))
         else:
             bill_id = getNewId(mybills)
 
@@ -44,7 +44,7 @@ def index():
         bill_amount  = request.form.get('bill-amount')
         bill_past_due  = request.form.get('bill-past-due')
         bill_paid_by = request.form.get('paid-by')
-        bill_paid  = 1 if request.form.get('bill-paid') == 'on' else 0
+        bill_paid  = int(request.form.get('bill-paid'))
 
         paid_date  = request.form.get('bill-paid-date')
 
@@ -58,7 +58,7 @@ def index():
                         "paid": bill_paid,
                         "paid_date": paid_date
                     }
-        if request.form.get('UpdateBill'):
+        if request.form.get('update_id'):
             for i in range(len(mybills)):
                 if mybills[i]['id'] == bill_id:
                     mybills[i]['name'] = bill_name
@@ -73,20 +73,20 @@ def index():
             mybills.append(json_obj)
         try:
             saveJSONToFile(bill_file, mybills)
-            if request.form.get('UpdateBill'):
+            if request.form.get('update_id'):
                 flash('Successfully updated bill','success')
             else:
                 flash('Successfully added new bill','success')
         except:
             flash('Failed to update bill!', 'danger')
     elif request.method == 'GET':
-        if request.args.get('update') != None:
+        if request.args.get('update'):
             update_id = int(request.args.get('update'))
             for i in range(len(mybills)):
                 if mybills[i]['id'] == update_id:
-                    update_bill = mybills[i]
+                    update = mybills[i]
 
-    return render_template('bills/index.html', sidebar=True, tables=True, bills=loadJSONFromFile(bill_file), update_bill=update_bill, upcoming_bills=upcoming_bills)
+    return render_template('bills/index.html', sidebar=True, tables=True, bills=loadJSONFromFile(bill_file), update=update, upcoming_bills=upcoming_bills)
 
 @bills.route('/bills/delete/<int:bill_id>', methods=['GET','POST'])
 def delete_bill(bill_id):
