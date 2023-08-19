@@ -4,97 +4,121 @@
 {% endblock %}
 {% block content %}
     {{ super() }}
-    <h1 >Home Management</h1>
+    <h1>Quick Reference</h1>
 
-    <!--Unpaid Bills-->
-{% if bills %}
-<div class="row g-1">
-    <div class="col-md widget no-float">
-<table class='table table-striped' id="bill-list-home">
-    <thead>
-        <tr>
-            <th>Unpaid Bills</th>
-            <th>Due</th>
-            <th>Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-
-            {% for bill in bills %}
-                {% if bill.paid == 0 %}
-                <tr>
-
-                        <td>{{bill.name}}</td>
-                        <td>{{bill.due_date}}</td>
-                        <td>{{bill.amount}}</td>
-
-
-                </tr>
-                {% endif %}
-            {% endfor %}
-    </tbody>
-</table>
-</div>
-</div>
-{% endif %}
+<!--Unpaid Bills-->
 
 <div class="row g-2">
-<!--Chores-->
-{% if chores %}
-<div class="col-md widget no-float">
-<table class='table table-striped' id="chore-list-home">
-    <thead>
-        <tr>
-            <th>Chore</th>
-            <th>Floor/Location</th>
-            <th>Assigned To</th>
-        </tr>
-    </thead>
-    <tbody>
-
-            {% for chore in chores %}
+    <div class="col-md widget no-float">
+        <table class='table table-striped' id="bill-list-home">
+            <thead>
                 <tr>
-                    <td>{{chore.name}}</td>
-                    <td>{{floors[chore.floor|string]}} - {{locations[chore.location|string]}}</td>
-                    <td>{% for assignee in assignees %}
-                        {% if assignee.id == chore.default_assignee %}
-                            {{assignee.name}}
-                        {% endif %}
-                    {% endfor %}</td>
+                    <th>Unpaid Bills</th>
+                    <th>Due</th>
+                    <th>Amount</th>
                 </tr>
-                
-            {% endfor %}
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+
+                    {% for bill in bills %}
+                        {% if bill.paid == 0 %}
+                        <tr>
+
+                                <td>{{bill.name}}</td>
+                                <td>{{bill.due_date}}</td>
+                                <td>{{bill.amount}}</td>
+
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md widget no-float">
+        <table class='table table-striped' id="shopping-list-home">
+            <thead>
+                <tr>
+                    <th>Shopping List</th>
+                    <th>Amount</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                    {% for item in shopping %}
+                        {% if item.purchased == 0 %}
+                        <tr>
+
+                                <td>{{item.name}}</td>
+                                <td>{{"$%.2f"|format(item.price)}}</td>
+                                <td>{{item.location}}</td>
+
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
-{% endif %}
+
+<div class="row g-2">
+    <!--Chores-->
+    <div class="col-md widget no-float">
+    <table class='table table-striped' id="chore-list-home">
+        <thead>
+            <tr>
+                <th>Chore</th>
+                <th>Floor/Location</th>
+                <th>Assigned To</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                {% for chore in chores %}
+                    <tr>
+                        <td>{{chore.name}}</td>
+                        <td>{{floors[chore.floor|string]}} - {{locations[chore.location|string]}}</td>
+                        <td>{% for assignee in assignees %}
+                            {% if assignee.id == chore.default_assignee %}
+                                {{assignee.name}}
+                            {% endif %}
+                        {% endfor %}</td>
+                    </tr>
+                    
+                {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
 
 
 <!--Tasks-->
-{% if tasks %}
-<div class="col-md widget no-float">
-<table class='table table-striped' id="task-list-home">
-    <thead>
-        <tr>
-            <th>Incomplete Tasks</th>
-            <th>Due</th>
-        </tr>
-    </thead>
-    <tbody>
-
-            {% for task in tasks %}
-                {% if task.complete == 0 %}
+    <div class="col-md widget no-float">
+        <table class='table table-striped' id="task-list-home">
+            <thead>
                 <tr>
-                    <td>{{task.task_name}}</td>
-                    <td>{{task.task_due}}</td>
+                    <th>Incomplete Tasks</th>
+                    <th>Due</th>
                 </tr>
-                {% endif %}
+            </thead>
+            <tbody>
 
-            {% endfor %}
-    </tbody>
-</table>
-</div>
-{% endif %}
+                    {% for task in tasks %}
+                        {% if task.complete == 0 %}
+                        <tr>
+                            <td>{{task.task_name}}</td>
+                            <td>{{task.task_due}}</td>
+                        </tr>
+                        {% endif %}
+
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
@@ -108,6 +132,7 @@
         $('#bill-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
         $('#task-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
         $('#chore-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
+        $('#shopping-list-home').DataTable({ "dom": '<"pull-left"f><"pull-right"l>tip', "pageLength": 5, "order": [[1, "asc"],[0, "asc"]] });
     });
 </script>
 {% endblock %}
